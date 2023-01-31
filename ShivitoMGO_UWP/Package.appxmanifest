@@ -7,14 +7,14 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="41523ShivitoApps.59245A86AB1D1"
+    Name="41523ShivitoApps.ShivitoApps"
     Publisher="CN=021B2679-8633-47BA-A016-6A9719E664F8"
-    Version="1.1.10.0" />
+    Version="1.1.19.0" />
 
-  <mp:PhoneIdentity PhoneProductId="fc75e25a-7799-49e3-90f3-0c63f4674af5" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="4ac205bc-9a25-4b84-9352-2983b5a96848" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>ShivitoMGO</DisplayName>
+    <DisplayName>ShivitoApps</DisplayName>
     <PublisherDisplayName>ShivitoApps</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -32,7 +32,7 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="ShivitoMGO_UWP.App">
       <uap:VisualElements
-        DisplayName="ShivitoMGO"
+        DisplayName="ShivitoApps"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
         Description="ShivitoMGO_UWP"
