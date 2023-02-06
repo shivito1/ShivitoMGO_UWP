@@ -53,6 +53,11 @@ namespace DataModels
 
     public class Player
     {
+        public Player(string name)
+        {
+            this.name = name;
+        }
+
         public int id { get; set; }
         public string name { get; set; }
         public int rank { get; set; }

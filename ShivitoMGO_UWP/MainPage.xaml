@@ -4,65 +4,74 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:ShivitoMGO_UWP"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Grid>
         <ListView>
-        <ListView>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Lobby Name"
+            <ListView>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Lobby Name"
                                Width="210"
                                Margin="20,0,20,8"
                                FontSize="24" 
                                FontStyle="Normal" 
                                FontWeight="SemiBold"
                                Foreground="#FF209628" />
-                <TextBlock Text="Players" 
+                    <TextBlock Text="Players" 
                                Width="80"
                                Margin="20,0,20,8"
                                FontSize="24" 
                                FontStyle="Normal" 
                                FontWeight="SemiBold"
                                Foreground="#FF209628" />
-                <TextBlock Text="Max Players" 
+                    <TextBlock Text="Max Players" 
                                Width="130"
                                Margin="20,0,20,8"
                                FontSize="24" 
                                FontStyle="Normal" 
                                FontWeight="SemiBold"
                                Foreground="#FF209628" />
-            </StackPanel>
-        </ListView>
-        <ListView x:Name="mylist" FocusVisualPrimaryBrush="#FFD82C2C" FocusVisualSecondaryBrush="#99286C88" Foreground="#FFE6E81A" IsItemClickEnabled="True">
-        <ListView.ItemTemplate>
-            <DataTemplate>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding Name}" 
+                </StackPanel>
+            </ListView>
+            <ListView x:Name="mylist" FocusVisualPrimaryBrush="#FFD82C2C" FocusVisualSecondaryBrush="#99286C88" Foreground="#FFE6E81A" IsItemClickEnabled="True">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Name}" 
                            Width="210"
                            Margin="20,0,20,8"
                            FontSize="24" 
                            FontStyle="Normal" 
                            FontWeight="SemiBold"
                            Foreground="DarkBlue" />
-                    <TextBlock Text="{Binding Num_Of_Players}" 
+                                <TextBlock Text="{Binding PlayersCount}" 
                            Width="80"
                            Margin="20,0,20,8"
                            FontSize="24" 
                            FontStyle="Normal" 
                            FontWeight="SemiBold"
                            Foreground="DarkBlue" />
-                    <TextBlock Text="{Binding Max_Players}" 
+                                <TextBlock Text="{Binding MaxPlayers}" 
                            Width="130"
                            Margin="20,0,20,8"
                            FontSize="24" 
                            FontStyle="Normal" 
                            FontWeight="SemiBold"
                            Foreground="DarkBlue" />
-                </StackPanel>
-            </DataTemplate>
-        </ListView.ItemTemplate>
-    </ListView>
+                            </StackPanel>
+                            <ListBox ItemsSource="{Binding PlayerNames}" Margin="20,0,0,10" Width="NaN" Height="100">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" />
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <ListView>
+            </ListView>
         </ListView>
     </Grid>
 </Page>
