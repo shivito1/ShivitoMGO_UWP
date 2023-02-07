@@ -15,6 +15,7 @@ using Windows.UI.Xaml;
 using System.Reflection;
 using Windows.UI.Xaml.Media;
 using Windows.UI.ViewManagement;
+using System.Net.NetworkInformation;
 
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -34,19 +35,13 @@ namespace ShivitoMGO_UWP
         {
             this.InitializeComponent();
 
-/*            try { Form1Load(); }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                listOfStudents.Add(new Student { Name = "No Internet", PlayersCount = 0, MaxPlayers = 0 });
-            }*/
             mylist.ItemsSource = listOfStudents;
             mylist.ItemClick += MylistItemClick;
             TTimer = new Timer(
     TickTimerAsync,
     null,
     50,
-    50);
+    5000);
 
 
         }
@@ -71,12 +66,7 @@ namespace ShivitoMGO_UWP
     mylist.ItemsSource = null;
     mylist.Items.Clear();
     System.Diagnostics.Debug.WriteLine("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
-    try { System.Diagnostics.Debug.WriteLine("skiping this "); }
-    catch (Exception ex)
-    {
-        System.Diagnostics.Debug.WriteLine(ex.Message);
-        listOfStudents.Add(new Student { Name = "No Internet", PlayersCount = 0, MaxPlayers = 0 });
-    }
+
     mylist.ItemsSource = listOfStudents;
 });
             }
@@ -119,10 +109,17 @@ namespace ShivitoMGO_UWP
         {
             checklistupdate.Clear();
             listOfStudents.Clear();
-            try
+            bool isNetworkConnected = NetworkInterface.GetIsNetworkAvailable();
+            System.Diagnostics.Debug.WriteLine(isNetworkConnected);
+            if (isNetworkConnected)
             {
                 using (var httpClient = new HttpClient())
                 {
+                    if(!isNetworkConnected)
+                    {
+                        return false;
+                    }
+                    System.Diagnostics.Debug.WriteLine("sanity check");
                     var response = await httpClient.GetStringAsync("https://mgo2pc.com/api/v1/games?extra=true");
                     var root = JsonConvert.DeserializeObject<Root>(response);
                     foreach (var lobby in root.data.lobbies)
@@ -137,11 +134,10 @@ namespace ShivitoMGO_UWP
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                checklistupdate.Add(new Student { Name = "No Internet", PlayersCount = 0, MaxPlayers = 0 });
+            else {
+                listOfStudents.Add(new Student { Name = "No Internet", PlayersCount = 0, MaxPlayers = 0 });
             }
+
             //Student last = listOfStudents.Last();
             List<string> list1 = new List<string>();
             List<string> list2 = new List<string>();
