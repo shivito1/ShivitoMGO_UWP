@@ -11,6 +11,10 @@ using Windows.Devices.Printers;
 using Windows.UI.Core;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using Windows.UI.Xaml;
+using System.Reflection;
+using Windows.UI.Xaml.Media;
+using Windows.UI.ViewManagement;
 
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -30,9 +34,6 @@ namespace ShivitoMGO_UWP
         {
             this.InitializeComponent();
 
-            // Add some sample data
-            
-
             try { Form1Load(); }
             catch (Exception ex)
             {
@@ -48,11 +49,6 @@ namespace ShivitoMGO_UWP
     5000);
 
 
-        }
-
-        private TimerCallback TickTimerAsync()
-        {
-            throw new NotImplementedException();
         }
 
         public async void TickTimerAsync(object state)
@@ -93,6 +89,21 @@ namespace ShivitoMGO_UWP
     Timeout.Infinite,
     Timeout.Infinite);
         }
+
+        private void ToggleVisibilityButton_Click(object sender, RoutedEventArgs e)
+{
+            var button = (Button)sender;
+            var gridView = (GridView)button.FindName("gridPanel");
+
+            if (gridView.Visibility == Visibility.Visible)
+    {
+        gridView.Visibility = Visibility.Collapsed;
+    }
+    else
+    {
+        gridView.Visibility = Visibility.Visible;
+    }
+}
 
         private void MylistItemClick(object sender, ItemClickEventArgs e)
         {
@@ -153,12 +164,12 @@ namespace ShivitoMGO_UWP
             return false;
         }
 
-        private async void Form1Load()
+        private void Form1Load()
         {
             listOfStudents.Clear();
             using (var httpClient = new HttpClient())
             {
-                var response = await httpClient.GetStringAsync("https://mgo2pc.com/api/v1/games?extra=true");
+                var response = httpClient.GetStringAsync("https://mgo2pc.com/api/v1/games?extra=true").Result;
                 var root = JsonConvert.DeserializeObject<Root>(response);
                 foreach (var lobby in root.data.lobbies)
                 {
@@ -168,9 +179,9 @@ namespace ShivitoMGO_UWP
                     {
                         names.Add(player.name);
                     }
-                    listOfStudents.Add(new Student { Name = lobby.name, PlayersCount = lobby.players.Count, MaxPlayers = lobby.maxPlayers, Locked = lobby.locked, PlayerNames = names });
+                    listOfStudents.Add(new Student { Name = lobby.name, PlayersCount = lobby.players.Count, MaxPlayers = lobby.maxPlayers, Locked = lobby.locked, PlayerNames = names, Visibility = Visibility.Collapsed });
                     System.Diagnostics.Debug.WriteLine("here is a lobby");
-
+                    
                     foreach (var e in listOfStudents[0].PlayerNames) { System.Diagnostics.Debug.WriteLine(e); }
 
                 }

@@ -4,35 +4,35 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:ShivitoMGO_UWP"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ListViewItemOverlayBackgroundThemeBrush}">
     <Grid>
-        <ListView>
-            <ListView>
+        <ListView Width="610">
+            <ListView Background="#111a1d" Width="600" Margin="0,20,0,0">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Lobby Name"
                                Width="210"
                                Margin="20,0,20,8"
-                               FontSize="24" 
+                               FontSize="15" 
                                FontStyle="Normal" 
                                FontWeight="SemiBold"
-                               Foreground="#FF209628" />
+                               Foreground="#cc9536"/>
                     <TextBlock Text="Players" 
                                Width="80"
                                Margin="20,0,20,8"
-                               FontSize="24" 
+                               FontSize="15" 
                                FontStyle="Normal" 
                                FontWeight="SemiBold"
-                               Foreground="#FF209628" />
+                               Foreground="#cc9536" />
                     <TextBlock Text="Max Players" 
                                Width="130"
                                Margin="20,0,20,8"
-                               FontSize="24" 
+                               FontSize="15" 
                                FontStyle="Normal" 
                                FontWeight="SemiBold"
-                               Foreground="#FF209628" />
+                               Foreground="#cc9536" />
                 </StackPanel>
             </ListView>
-            <ListView x:Name="mylist" FocusVisualPrimaryBrush="#FFD82C2C" FocusVisualSecondaryBrush="#99286C88" Foreground="#FFE6E81A" IsItemClickEnabled="True">
+            <ListView x:Name="mylist" Background="#3c2216" IsItemClickEnabled="True" Width="600">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
@@ -40,37 +40,43 @@
                                 <TextBlock Text="{Binding Name}" 
                            Width="210"
                            Margin="20,0,20,8"
-                           FontSize="24" 
+                           FontSize="15" 
                            FontStyle="Normal" 
                            FontWeight="SemiBold"
-                           Foreground="DarkBlue" />
+                           Foreground="#3371ff" />
                                 <TextBlock Text="{Binding PlayersCount}" 
                            Width="80"
                            Margin="20,0,20,8"
-                           FontSize="24" 
+                           FontSize="15" 
                            FontStyle="Normal" 
                            FontWeight="SemiBold"
-                           Foreground="DarkBlue" />
+                           Foreground="#3371ff" />
                                 <TextBlock Text="{Binding MaxPlayers}" 
                            Width="130"
                            Margin="20,0,20,8"
-                           FontSize="24" 
+                           FontSize="15" 
                            FontStyle="Normal" 
                            FontWeight="SemiBold"
-                           Foreground="DarkBlue" />
+                           Foreground="#3371ff" />
+                                <Button x:Name="ToggleVisibilityButton" Content="^" Foreground="#9a4307" Background="#ffee72" Click="ToggleVisibilityButton_Click"/>
                             </StackPanel>
-                            <ListBox ItemsSource="{Binding PlayerNames}" Margin="20,0,0,10" Width="NaN" Height="100">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding}" />
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
+                            <StackPanel>
+                                <GridView x:Name="gridPanel" ItemsSource="{Binding PlayerNames}" Visibility="{Binding Visibility}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"  >
+                                    <GridView.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapGrid MaximumRowsOrColumns="3"/>
+                                        </ItemsPanelTemplate>
+                                    </GridView.ItemsPanel>
+                                    <GridView.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding}" TextWrapping="Wrap" FontSize="12" Foreground="#f43" TextAlignment="Center" Margin="2,2,2,2" MinWidth="90" MaxWidth="200" />
+                                        </DataTemplate>
+                                    </GridView.ItemTemplate>
+                                </GridView>
+                            </StackPanel>
                         </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
-            </ListView>
-            <ListView>
             </ListView>
         </ListView>
     </Grid>

@@ -1,5 +1,6 @@
 ﻿using DataModels;
 using System.Collections.ObjectModel;
+using Windows.UI.Xaml;
 
 namespace ShivitoMGO_UWP
 {
@@ -10,5 +11,6 @@ namespace ShivitoMGO_UWP
         public int MaxPlayers { get; set; }
         public bool Locked { get; set; }
         public ObservableCollection<string> PlayerNames { get; set; }
+        public Visibility Visibility { get; set; } = Visibility.Visible;
     }
 }
