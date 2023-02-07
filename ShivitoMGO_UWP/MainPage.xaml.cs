@@ -34,19 +34,19 @@ namespace ShivitoMGO_UWP
         {
             this.InitializeComponent();
 
-            try { Form1Load(); }
+/*            try { Form1Load(); }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
                 listOfStudents.Add(new Student { Name = "No Internet", PlayersCount = 0, MaxPlayers = 0 });
-            }
+            }*/
             mylist.ItemsSource = listOfStudents;
             mylist.ItemClick += MylistItemClick;
             TTimer = new Timer(
     TickTimerAsync,
     null,
-    5000,
-    5000);
+    50,
+    50);
 
 
         }
@@ -71,7 +71,7 @@ namespace ShivitoMGO_UWP
     mylist.ItemsSource = null;
     mylist.Items.Clear();
     System.Diagnostics.Debug.WriteLine("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
-    try { Form1Load(); }
+    try { System.Diagnostics.Debug.WriteLine("skiping this "); }
     catch (Exception ex)
     {
         System.Diagnostics.Debug.WriteLine(ex.Message);
@@ -80,7 +80,7 @@ namespace ShivitoMGO_UWP
     mylist.ItemsSource = listOfStudents;
 });
             }
-            Thread.Sleep(10000);
+            Thread.Sleep(50);
         }
 
         public void StopTimer()
@@ -111,33 +111,36 @@ namespace ShivitoMGO_UWP
             if (clickedItem != null) { System.Diagnostics.Debug.WriteLine(clickedItem.ToString()); }
             mylist.ItemsSource = null;
             mylist.Items.Clear();
-            try { Form1Load(); }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                checklistupdate.Add(new Student { Name = "No Internet", PlayersCount = 0, MaxPlayers = 0 });
-            }
+            
             mylist.ItemsSource = listOfStudents;
         }
 
         public async Task<bool> CheckMgoValuesAsync()
         {
             checklistupdate.Clear();
-            using (var httpClient = new HttpClient())
+            listOfStudents.Clear();
+            try
             {
-                var response = await httpClient.GetStringAsync("https://mgo2pc.com/api/v1/games?extra=true");
-                var root = JsonConvert.DeserializeObject<Root>(response);
-                foreach (var lobby in root.data.lobbies)
+                using (var httpClient = new HttpClient())
                 {
-                    ObservableCollection<string> names = new ObservableCollection<string>();
-                    names.Clear();
-                    foreach (var player in lobby.players)
+                    var response = await httpClient.GetStringAsync("https://mgo2pc.com/api/v1/games?extra=true");
+                    var root = JsonConvert.DeserializeObject<Root>(response);
+                    foreach (var lobby in root.data.lobbies)
                     {
-                        names.Add(player.name);
+                        ObservableCollection<string> names = new ObservableCollection<string>();
+                        names.Clear();
+                        foreach (var player in lobby.players)
+                        {
+                            names.Add(player.name);
+                        }
+                        checklistupdate.Add(new Student { Name = lobby.name, PlayersCount = lobby.players.Count, MaxPlayers = lobby.maxPlayers, Locked = lobby.locked, PlayerNames = names, Visibility = Visibility.Collapsed });
                     }
-                    checklistupdate.Add(new Student { Name = lobby.name, PlayersCount = lobby.players.Count, MaxPlayers = lobby.maxPlayers, Locked = lobby.locked, PlayerNames = names });
-
                 }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                checklistupdate.Add(new Student { Name = "No Internet", PlayersCount = 0, MaxPlayers = 0 });
             }
             //Student last = listOfStudents.Last();
             List<string> list1 = new List<string>();
@@ -160,32 +163,8 @@ namespace ShivitoMGO_UWP
             {
                 return true;
             }
-
+            listOfStudents = checklistupdate;
             return false;
-        }
-
-        private void Form1Load()
-        {
-            listOfStudents.Clear();
-            using (var httpClient = new HttpClient())
-            {
-                var response = httpClient.GetStringAsync("https://mgo2pc.com/api/v1/games?extra=true").Result;
-                var root = JsonConvert.DeserializeObject<Root>(response);
-                foreach (var lobby in root.data.lobbies)
-                {
-                    ObservableCollection<string> names = new ObservableCollection<string>();
-                    names.Clear();
-                    foreach (var player in lobby.players)
-                    {
-                        names.Add(player.name);
-                    }
-                    listOfStudents.Add(new Student { Name = lobby.name, PlayersCount = lobby.players.Count, MaxPlayers = lobby.maxPlayers, Locked = lobby.locked, PlayerNames = names, Visibility = Visibility.Collapsed });
-                    System.Diagnostics.Debug.WriteLine("here is a lobby");
-                    
-                    foreach (var e in listOfStudents[0].PlayerNames) { System.Diagnostics.Debug.WriteLine(e); }
-
-                }
-            }
         }
     }
 }
