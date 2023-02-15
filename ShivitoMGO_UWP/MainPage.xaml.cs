@@ -16,6 +16,7 @@ using System.Reflection;
 using Windows.UI.Xaml.Media;
 using Windows.UI.ViewManagement;
 using System.Net.NetworkInformation;
+using Windows.ApplicationModel.Email.DataProvider;
 
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -101,7 +102,13 @@ namespace ShivitoMGO_UWP
             if (clickedItem != null) { System.Diagnostics.Debug.WriteLine(clickedItem.ToString()); }
             mylist.ItemsSource = null;
             mylist.Items.Clear();
-            
+            bool isEmpty = !listOfStudents.Any();
+            if (isEmpty)
+            {
+                listOfStudents.Clear();
+                System.Diagnostics.Debug.WriteLine("ran no internet");
+                listOfStudents.Add(new Student { Name = "No Internet. Click to refresh", PlayersCount = 0, MaxPlayers = 0 });
+            }
             mylist.ItemsSource = listOfStudents;
         }
 
@@ -109,19 +116,15 @@ namespace ShivitoMGO_UWP
         {
             checklistupdate.Clear();
             listOfStudents.Clear();
-            bool isNetworkConnected = NetworkInterface.GetIsNetworkAvailable();
-            System.Diagnostics.Debug.WriteLine(isNetworkConnected);
-            if (isNetworkConnected)
+            bool OnOff = true;
+            try 
             {
                 using (var httpClient = new HttpClient())
                 {
-                    if(!isNetworkConnected)
-                    {
-                        return false;
-                    }
-                    System.Diagnostics.Debug.WriteLine("sanity check");
+                    
                     var response = await httpClient.GetStringAsync("https://mgo2pc.com/api/v1/games?extra=true");
                     var root = JsonConvert.DeserializeObject<Root>(response);
+                    System.Diagnostics.Debug.WriteLine("sanity check");
                     foreach (var lobby in root.data.lobbies)
                     {
                         ObservableCollection<string> names = new ObservableCollection<string>();
@@ -134,8 +137,9 @@ namespace ShivitoMGO_UWP
                     }
                 }
             }
-            else {
-                listOfStudents.Add(new Student { Name = "No Internet", PlayersCount = 0, MaxPlayers = 0 });
+            catch {
+                checklistupdate.Add(new Student { Name = "No Internet. Click to refresh", PlayersCount = 0, MaxPlayers = 0 });
+                OnOff= false;
             }
 
             //Student last = listOfStudents.Last();
@@ -155,6 +159,12 @@ namespace ShivitoMGO_UWP
             }
             bool isEqual = list1.OrderBy(x => x).SequenceEqual(list2.OrderBy(x => x));
             System.Diagnostics.Debug.WriteLine(isEqual);
+            if (OnOff == false)
+            {
+                listOfStudents = checklistupdate;
+                OnOff = true;
+                return false;
+            }
             if (isEqual)
             {
                 return true;
